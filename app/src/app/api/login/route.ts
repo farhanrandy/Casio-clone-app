@@ -3,6 +3,7 @@ import UserModel from "@/db/models/UserModel";
 import { compareSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
     );
     const cookieStore = await cookies();
     cookieStore.set("Authorization", `Bearer ${accessToken}`);
-    return Response.json({ accessToken });
+    return NextResponse.json({ accessToken });
   } catch (err) {
     return errHandler(err);
   }

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { database } from "../config/mongodb";
+import { getDatabase } from "../config/mongodb";
 
 class ProductModel {
   static async getAll(
@@ -25,7 +25,8 @@ class ProductModel {
       ];
     }
 
-    return await database
+    const db = await getDatabase();
+    return await db
       .collection("products")
       .find(query)
       .sort({ _id: 1 })
@@ -34,7 +35,8 @@ class ProductModel {
   }
 
   static async getAllTags() {
-    const result = await database
+    const db = await getDatabase();
+    const result = await db
       .collection("products")
       .aggregate([
         { $unwind: "$tags" },
@@ -46,7 +48,8 @@ class ProductModel {
   }
 
   static async getBySlug(slug: string) {
-    return await database.collection("products").findOne({ slug });
+    const db = await getDatabase();
+    return await db.collection("products").findOne({ slug });
   }
 }
 

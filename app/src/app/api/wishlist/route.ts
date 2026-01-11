@@ -1,5 +1,7 @@
 import errHandler from "@/helpers/errHandler";
 import WishlistModel from "@/db/models/WishlistModel";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -9,7 +11,7 @@ export async function POST(request: Request) {
       throw { message: "Unauthorized", status: 401 };
     }
     await WishlistModel.create(userId, productId);
-    return Response.json({ message: "Product added to wishlist" });
+      return NextResponse.json({ message: "Product added to wishlist" });
   } catch (err) {
     return errHandler(err);
   }
@@ -22,7 +24,7 @@ export async function GET(request: Request) {
       throw { message: "Unauthorized", status: 401 };
     }
     const wishlists = await WishlistModel.getByUserIdWithProducts(userId);
-    return Response.json(wishlists);
+      return NextResponse.json(wishlists);
   } catch (err) {
     return errHandler(err);
   }
@@ -36,7 +38,7 @@ export async function DELETE(request: Request) {
       throw { message: "Unauthorized", status: 401 };
     }
     await WishlistModel.delete(userId, productId);
-    return Response.json({ message: "Product removed from wishlist" });
+      return NextResponse.json({ message: "Product removed from wishlist" });
   } catch (err) {
     return errHandler(err);
   }

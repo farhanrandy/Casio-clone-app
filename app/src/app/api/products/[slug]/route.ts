@@ -1,5 +1,6 @@
 import errHandler from "@/helpers/errHandler";
 import ProductModel from "@/db/models/ProductModel";
+import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
@@ -11,7 +12,7 @@ export async function GET(
     if (!product) {
       return new Response("Product not found", { status: 404 });
     }
-    return Response.json(product);
+    return NextResponse.json(product);
   } catch (err) {
     return errHandler(err);
   }

@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { hashSync } from "bcryptjs";
-import { database } from "../config/mongodb";
+import { getDatabase } from "../config/mongodb";
 import { UserType } from "@/types";
 const UserSChema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -16,17 +16,19 @@ const UserSChema = z.object({
 class UserModel {
   static async create(payload: UserType) {
     UserSChema.parse(payload);
-    const user = await database.collection("users").findOne({
+    const db = await getDatabase();
+    const user = await db.collection("users").findOne({
       $or: [{ email: payload.email }, { username: payload.username }],
     });
     if (user) {
       throw { message: "Email or username already exists", status: 400 };
     }
     payload.password = hashSync(payload.password, 10);
-    await database.collection("users").insertOne(payload);
+    await db.collection("users").insertOne(payload);
   }
   static async findByEmail(email: string) {
-    return database.collection("users").findOne({ email });
+    const db = await getDatabase();
+    return db.collection("users").findOne({ email });
   }
 }
 

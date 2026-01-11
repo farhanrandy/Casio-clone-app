@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { NextResponse } from "next/server";
 
 export default function errHandler(err: unknown) {
   const error = err as { message: string; status: number };
@@ -9,7 +10,7 @@ export default function errHandler(err: unknown) {
     error.message = error.issues[0].message;
   }
 
-  return Response.json(
+  return NextResponse.json(
     { message: error.message },
     { status: error.status || 500 }
   );

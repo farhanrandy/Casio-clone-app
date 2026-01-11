@@ -1,15 +1,17 @@
 import { ObjectId } from "mongodb";
-import { database } from "../config/mongodb";
+import { getDatabase } from "../config/mongodb";
 
 class WishlistModel {
   static async create(userId: string, productId: string) {
-    return await database.collection("wishlists").insertOne({
+    const db = await getDatabase();
+    return await db.collection("wishlists").insertOne({
       userId: new ObjectId(userId),
       productId: new ObjectId(productId),
     });
   }
   static async getByUserIdWithProducts(userId: string) {
-    return await database
+    const db = await getDatabase();
+    return await db
       .collection("wishlists")
       .aggregate([
         {
@@ -27,7 +29,8 @@ class WishlistModel {
       .toArray();
   }
   static async delete(userId: string, productId: string) {
-    return await database.collection("wishlists").deleteOne({
+    const db = await getDatabase();
+    return await db.collection("wishlists").deleteOne({
       userId: new ObjectId(userId),
       productId: new ObjectId(productId),
     });

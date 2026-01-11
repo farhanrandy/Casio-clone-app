@@ -1,5 +1,5 @@
 import ProductModel from "@/db/models/ProductModel";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   // ambil query string ?cursor=...&limit=...&tags=...&search=...
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const nextCursor =
     items.length > 0 ? items[items.length - 1]._id.toString() : null;
 
-  return Response.json({
+  return NextResponse.json({
     items,
     nextCursor,
   });
